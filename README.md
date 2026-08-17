@@ -46,7 +46,7 @@ and not redistributed. See "Obtaining the firmware" below.
 
 ## Where to start
 
-- **`REPORT.md`** — the full technical report
+- **`REPORT.md`** — the full technical report (or the [styled HTML version](https://soobrosa.github.io/mc101-firmware-re/))
 - **`FEASIBILITY.md`** — if you have a concrete modding goal, read this *first*. Answers "how close are we to X?" for older-firmware value, custom preset UI, and sidechain, each with realistic time / effort estimates
 - **`CROSS_VERSION.md`** — three-way cross-product cross-version analysis (MC-101 v1.82, MC-707 v1.82, MC-707 v1.20). Confirms only 2 files change between versions; all sample/preset content byte-identical
 - **`TODO.md`** — open questions ranked by yield-per-effort, plus corrections-applied checklist
