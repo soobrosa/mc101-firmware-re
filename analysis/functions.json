@@ -1,0 +1,798 @@
+[
+ {
+  "addr": "0x1aefa",
+  "end": "0x1b38e",
+  "size": 1172,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x349f6",
+  "end": "0x34ad8",
+  "size": 226,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x34d86",
+  "end": "0x34dc4",
+  "size": 62,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x34f50",
+  "end": "0x3506c",
+  "size": 284,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x35692",
+  "end": "0x356d8",
+  "size": 70,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x35b34",
+  "end": "0x35c10",
+  "size": 220,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x37ede",
+  "end": "0x37f04",
+  "size": 38,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x37f38",
+  "end": "0x382e0",
+  "size": 936,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x38948",
+  "end": "0x389f0",
+  "size": 168,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x41378",
+  "end": "0x4148c",
+  "size": 276,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x4148c",
+  "end": "0x41538",
+  "size": 172,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x41538",
+  "end": "0x41658",
+  "size": 288,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x7e70c",
+  "end": "0x7e72c",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x7ea30",
+  "end": "0x7ea7c",
+  "size": 76,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x7ecb4",
+  "end": "0x7ed20",
+  "size": 108,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x7ed20",
+  "end": "0x7ed98",
+  "size": 120,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x7f444",
+  "end": "0x7f464",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x7f894",
+  "end": "0x7f8b4",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x7fe24",
+  "end": "0x7fe40",
+  "size": 28,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x7feec",
+  "end": "0x7ff14",
+  "size": 40,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x80a30",
+  "end": "0x80a50",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x815d4",
+  "end": "0x815f8",
+  "size": 36,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x81774",
+  "end": "0x81794",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x82284",
+  "end": "0x822a4",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x82404",
+  "end": "0x82424",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x82894",
+  "end": "0x828b4",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x829d8",
+  "end": "0x829f8",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x82d6c",
+  "end": "0x82d9c",
+  "size": 48,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x82e74",
+  "end": "0x82e90",
+  "size": 28,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x83f64",
+  "end": "0x83f84",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x840dc",
+  "end": "0x840f8",
+  "size": 28,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x8418c",
+  "end": "0x841b0",
+  "size": 36,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x84484",
+  "end": "0x844a4",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x84acc",
+  "end": "0x84afc",
+  "size": 48,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x84cbc",
+  "end": "0x84cdc",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x85478",
+  "end": "0x854a8",
+  "size": 48,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x855f8",
+  "end": "0x85618",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x858f0",
+  "end": "0x85928",
+  "size": 56,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x85d20",
+  "end": "0x85d3c",
+  "size": 28,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x85dac",
+  "end": "0x85dc8",
+  "size": 28,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x85e38",
+  "end": "0x85ed0",
+  "size": 152,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x868e0",
+  "end": "0x86904",
+  "size": 36,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x8741c",
+  "end": "0x87438",
+  "size": 28,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x8774c",
+  "end": "0x8776c",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x88398",
+  "end": "0x88720",
+  "size": 904,
+  "tag": null,
+  "n_strs": 1,
+  "strings_sample": [
+   "\"a j"
+  ]
+ },
+ {
+  "addr": "0x88738",
+  "end": "0x88754",
+  "size": 28,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x888a4",
+  "end": "0x888c4",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x88e80",
+  "end": "0x88ea0",
+  "size": 32,
+  "tag": "QSPI",
+  "n_strs": 1,
+  "strings_sample": [
+   " QSPI Version\n"
+  ]
+ },
+ {
+  "addr": "0x8a404",
+  "end": "0x94fee",
+  "size": 44010,
+  "tag": "DSP",
+  "n_strs": 4,
+  "strings_sample": [
+   "aDSP%c VerifyProg() = ",
+   "%31s",
+   "\nHbp@",
+   "13CMfxDJFXLPPrm"
+  ]
+ },
+ {
+  "addr": "0x9e1a4",
+  "end": "0xa5198",
+  "size": 28660,
+  "tag": "CORE",
+  "n_strs": 1,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n"
+  ]
+ },
+ {
+  "addr": "0xabbb4",
+  "end": "0xc4e70",
+  "size": 103100,
+  "tag": null,
+  "n_strs": 6,
+  "strings_sample": [
+   "%08d: ***** FIFO Error %d '%s\n",
+   "%c%c",
+   "idx\n",
+   "adrs",
+   "f43m",
+   "........ "
+  ]
+ },
+ {
+  "addr": "0xc5674",
+  "end": "0xdb554",
+  "size": 89824,
+  "tag": "DSP",
+  "n_strs": 27,
+  "strings_sample": [
+   "[%2d] %3d %3d %s\n",
+   "DSP%c VerifyDrProg() = ",
+   "$L&M",
+   "%08d: ***** DSP RTE%d\n",
+   "PRM= %08Xh %s\n",
+   "%08d: ***** Error Can't Assign LFO\n",
+   "%08d: ***** FIFO Error %d '%s\n",
+   "%-4s %02Xh=%-14s %08lXh"
+  ]
+ },
+ {
+  "addr": "0xdb554",
+  "end": "0xe02d8",
+  "size": 19844,
+  "tag": null,
+  "n_strs": 1,
+  "strings_sample": [
+   "0:Disable"
+  ]
+ },
+ {
+  "addr": "0xe02d8",
+  "end": "0xfd438",
+  "size": 119136,
+  "tag": "DSP",
+  "n_strs": 10,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "Idx  Source      Dest        Count  Curr        Next\n",
+   "Program N/A    %-4s %08lXh",
+   "Ill Inst %-4s Idx%2d %08lXh",
+   "%-4s %02Xh=%-14s %08lXh",
+   "Illegal CPU Write   %08Xh",
+   "Zero Divide    %-4s %08Xh",
+   "PDH Access (DSP %c%c%c%c%c%c) %04Xh"
+  ]
+ },
+ {
+  "addr": "0xfd438",
+  "end": "0x10cdb0",
+  "size": 63864,
+  "tag": "CORE",
+  "n_strs": 1,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n"
+  ]
+ },
+ {
+  "addr": "0x10cdb0",
+  "end": "0x14a89c",
+  "size": 252652,
+  "tag": "CORE",
+  "n_strs": 5,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "5#*F!F",
+   " ---- ------------ ------ ----------------\n",
+   "| d |            |DSP|   |DSP|   |DSP|--> L Ch  ",
+   "F3      F4      F5      F6      F7      F8      "
+  ]
+ },
+ {
+  "addr": "0x14e874",
+  "end": "0x16d214",
+  "size": 125344,
+  "tag": "CORE",
+  "n_strs": 4,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "5#*F!F",
+   "\t\t  ",
+   " |   |-- (%3d) -->|DSP|-->|DSP|-->|DSP|          "
+  ]
+ },
+ {
+  "addr": "0x16d214",
+  "end": "0x187de4",
+  "size": 109520,
+  "tag": "CORE",
+  "n_strs": 5,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "EZHMI",
+   "5#ZF!F",
+   "%cGain          %d.0   %c",
+   "                       USE MFX1 START   STOP    "
+  ]
+ },
+ {
+  "addr": "0x187de4",
+  "end": "0x18eb80",
+  "size": 28060,
+  "tag": "CORE",
+  "n_strs": 2,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "EZHMI"
+  ]
+ },
+ {
+  "addr": "0x18eb80",
+  "end": "0x1bab30",
+  "size": 180144,
+  "tag": "CORE",
+  "n_strs": 3,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "1:int-done",
+   "CSum = %04Xh\n"
+  ]
+ },
+ {
+  "addr": "0x1bab38",
+  "end": "0x1cf7ec",
+  "size": 85172,
+  "tag": "CORE",
+  "n_strs": 2,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "| R |-- (%3d) -->| 0 |-->| 2 |-->| 4 |          "
+  ]
+ },
+ {
+  "addr": "0x1cf7ec",
+  "end": "0x1d0578",
+  "size": 3468,
+  "tag": "CORE",
+  "n_strs": 1,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n"
+  ]
+ },
+ {
+  "addr": "0x1d0578",
+  "end": "0x1d125c",
+  "size": 3300,
+  "tag": "CORE",
+  "n_strs": 1,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n"
+  ]
+ },
+ {
+  "addr": "0x1d628e",
+  "end": "0x1d6cac",
+  "size": 2590,
+  "tag": "CORE",
+  "n_strs": 1,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n"
+  ]
+ },
+ {
+  "addr": "0x1d6e14",
+  "end": "0x20ca00",
+  "size": 220140,
+  "tag": "CORE",
+  "n_strs": 3,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "------- ------- ------- ------- ------- ------- ",
+   "`pG------- ------- ------- ------- ------- ------- "
+  ]
+ },
+ {
+  "addr": "0x20ca00",
+  "end": "0x21e780",
+  "size": 73088,
+  "tag": "CORE",
+  "n_strs": 3,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "EZHMI",
+   "5#ZF!F"
+  ]
+ },
+ {
+  "addr": "0x21e780",
+  "end": "0x24d09c",
+  "size": 190748,
+  "tag": "CORE",
+  "n_strs": 2,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "Find Prev/Next"
+  ]
+ },
+ {
+  "addr": "0x24d0a4",
+  "end": "0x25cc20",
+  "size": 64380,
+  "tag": "CORE",
+  "n_strs": 1,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n"
+  ]
+ },
+ {
+  "addr": "0x25cc20",
+  "end": "0x27e1e4",
+  "size": 136644,
+  "tag": "CORE",
+  "n_strs": 6,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "EZHMI",
+   "5#*F!F",
+   "5#*F!F",
+   "5#ZF!F",
+   ")aVq"
+  ]
+ },
+ {
+  "addr": "0x27e1e4",
+  "end": "0x28f98c",
+  "size": 71592,
+  "tag": "MIDI",
+  "n_strs": 6,
+  "strings_sample": [
+   "........ ",
+   "F3      F4      F5      F6      F7      F8",
+   "RXDTDmp ASGNDmp         DmpNote DmpCtrl",
+   "------- ------- ------- ------- ------- -------",
+   "%-5s%8ld %9s%c",
+   "adrs"
+  ]
+ },
+ {
+  "addr": "0x28faac",
+  "end": "0x2a80a0",
+  "size": 99828,
+  "tag": "CORE",
+  "n_strs": 3,
+  "strings_sample": [
+   "%08d: Check CORE0 Exists = %s\n",
+   "%-4s %02Xh=%-14s %08lXh",
+   "5#ZF!F"
+  ]
+ },
+ {
+  "addr": "0x2e436c",
+  "end": "0x2e4e38",
+  "size": 2764,
+  "tag": null,
+  "n_strs": 1,
+  "strings_sample": [
+   "System Looper"
+  ]
+ },
+ {
+  "addr": "0x2e4e38",
+  "end": "0x2e742e",
+  "size": 9718,
+  "tag": "DSP",
+  "n_strs": 3,
+  "strings_sample": [
+   " %08d: ***** DSP Error %s:%d %s\n",
+   "[INC]/[DEC] = Find Prev/Next",
+   "t6\na"
+  ]
+ },
+ {
+  "addr": "0x34fb0e",
+  "end": "0x3842e0",
+  "size": 214994,
+  "tag": null,
+  "n_strs": 1,
+  "strings_sample": [
+   "TRK2 Cue Level"
+  ]
+ }
+]

@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MC-101 Firmware Analysis</title>
+<style>
+
+:root { color-scheme: dark; --ground: #0b0b0d; --surface: #131317; --surface-2: #1a1a20; --code-bg: #08080a; --border: #26262d; --border-soft: #1c1c22; --text: #e8e6e0; --text-dim: #8f8f97; --text-dimmer: #55555c; --accent: #ef2c4a; --accent-soft: rgba(239,44,74,0.12); --accent-line: rgba(239,44,74,0.35); --amber: #f5a524; --code-text: #d4d8d0; --mono: "SF Mono", ui-monospace, "Menlo", "Cascadia Code", "Consolas", monospace; --sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", "Helvetica Neue", system-ui, sans-serif; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:var(--ground); color:var(--text); font-family:var(--sans); font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased; font-variant-numeric:tabular-nums; }
+.wrap { display:grid; grid-template-columns:minmax(0,1fr); max-width:1180px; margin:0 auto; padding:48px 32px 96px; gap:40px; }
+@media (min-width:1000px) { .wrap { grid-template-columns:minmax(0,1fr) 220px; gap:56px; padding:56px 40px 120px; } }
+.hero { border:1px solid var(--border); background:var(--surface); padding:32px 32px 28px; position:relative; }
+.hero::before { content:""; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent) 0%,var(--accent) 20%,transparent 60%); }
+.hero-tag { font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-dim); margin:0 0 10px; }
+.hero-tag em { color:var(--accent); font-style:normal; }
+.hero h1 { font-family:var(--mono); font-weight:600; font-size:clamp(26px,4vw,38px); line-height:1.15; margin:0 0 8px; letter-spacing:-0.005em; text-wrap:balance; }
+.hero-sub { color:var(--text-dim); font-size:16px; margin:0 0 24px; max-width:60ch; }
+.chip { display:grid; grid-template-columns:max-content 1fr; gap:4px 24px; font-family:var(--mono); font-size:12.5px; border-top:1px dashed var(--border); padding-top:20px; }
+.chip dt { color:var(--text-dimmer); letter-spacing:0.1em; text-transform:uppercase; font-size:11px; align-self:baseline; }
+.chip dd { margin:0; color:var(--text); }
+.chip dd code { background:transparent; padding:0; color:var(--accent); }
+aside.toc { order:2; }
+@media (min-width:1000px) { aside.toc { position:sticky; top:32px; align-self:start; max-height:calc(100vh - 64px); overflow-y:auto; padding-right:6px; } }
+.toc-label { font-family:var(--mono); font-size:10.5px; letter-spacing:0.22em; text-transform:uppercase; color:var(--text-dimmer); padding:0 4px 8px; border-bottom:1px solid var(--border-soft); margin-bottom:6px; }
+.toc a { display:flex; gap:12px; align-items:baseline; padding:5px 4px; color:var(--text-dim); text-decoration:none; font-size:12.5px; line-height:1.35; border-left:1px solid transparent; padding-left:8px; margin-left:-8px; transition:color 120ms,border-color 120ms; }
+.toc a:hover { color:var(--text); border-left-color:var(--accent); }
+.toc-num { font-family:var(--mono); font-size:10.5px; color:var(--text-dimmer); min-width:34px; flex-shrink:0; }
+.toc-title { flex:1; }
+main { order:1; min-width:0; }
+.section { padding:32px 0 0; margin-top:8px; scroll-margin-top:16px; }
+.section + .section { border-top:1px solid var(--border-soft); padding-top:44px; margin-top:40px; }
+.sec-head { display:flex; gap:20px; align-items:baseline; margin:0 0 20px; }
+.sec-num { font-family:var(--mono); font-size:11.5px; letter-spacing:0.12em; color:var(--accent); padding:3px 8px; border:1px solid var(--accent-line); background:var(--accent-soft); flex-shrink:0; align-self:center; font-weight:500; }
+.section h2 { font-family:var(--mono); font-weight:600; font-size:22px; margin:0; color:var(--text); text-wrap:balance; letter-spacing:-0.005em; }
+.section h3 { font-family:var(--mono); font-weight:600; font-size:14px; letter-spacing:0.02em; color:var(--amber); margin:28px 0 10px; text-transform:none; }
+.section p { margin:12px 0; max-width:72ch; }
+.section a { color:var(--text); text-decoration:underline; text-decoration-color:var(--accent-line); text-underline-offset:2px; }
+.section a:hover { text-decoration-color:var(--accent); }
+.section ul,.section ol { margin:12px 0; padding-left:20px; max-width:72ch; }
+.section li { margin:6px 0; padding-left:4px; }
+.section li::marker { color:var(--text-dimmer); }
+code { font-family:var(--mono); font-size:0.9em; background:var(--surface-2); padding:1px 5px; border-radius:2px; color:var(--text); border:1px solid var(--border-soft); }
+strong code { color:var(--amber); }
+pre.code { background:var(--code-bg); border:1px solid var(--border); padding:16px 20px; margin:18px 0; overflow-x:auto; position:relative; font-size:12.5px; line-height:1.55; }
+pre.code::before { content:""; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,var(--accent-line) 0%,transparent 40%); }
+pre.code code { background:transparent; border:none; padding:0; color:var(--code-text); font-size:inherit; white-space:pre; }
+pre.code[data-lang]::after { content:attr(data-lang); position:absolute; top:6px; right:10px; font-family:var(--mono); font-size:9.5px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-dimmer); }
+.table-wrap { overflow-x:auto; margin:18px 0; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:13px; background:var(--surface); font-variant-numeric:tabular-nums; }
+th { text-align:left; padding:10px 14px; font-family:var(--mono); font-weight:600; font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-dim); border-bottom:1px solid var(--border); background:var(--surface-2); white-space:nowrap; }
+td { padding:10px 14px; border-bottom:1px solid var(--border-soft); color:var(--text); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:rgba(255,255,255,0.02); }
+td code { background:rgba(0,0,0,0.35); border-color:rgba(255,255,255,0.05); color:var(--code-text); font-size:12px; }
+footer.foot { margin-top:72px; padding-top:24px; border-top:1px solid var(--border-soft); color:var(--text-dimmer); font-family:var(--mono); font-size:11.5px; letter-spacing:0.06em; display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+footer.foot .mark { color:var(--accent); }
+::selection { background:var(--accent); color:var(--ground); }
+::-webkit-scrollbar { width:10px; height:10px; }
+::-webkit-scrollbar-track { background:var(--ground); }
+::-webkit-scrollbar-thumb { background:var(--border); }
+::-webkit-scrollbar-thumb:hover { background:var(--text-dimmer); }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <main>
+    <header class="hero">
+      <p class="hero-tag">Firmware analysis &middot; <em>Roland MC-101 + MC-707</em> &middot; v1.82</p>
+      <h1>RPG69 — Roland MC-101 Firmware Analysis</h1>
+      <p class="hero-sub">Structural analysis of Roland's Zen-Core groovebox firmware. Encryption analysis of the encrypted main app, full decode of the inter-core UMDW protocol, parameter address model, wave-ROM directory, boot loader, and factory test-mode dispatch. Cross-verified against MC-707 v1.82 — <strong>same encryption key confirmed</strong>, 26 non-code files byte-identical between the two products.</p>
+      <dl class="chip">
+        <dt>File</dt>       <dd><code>MC101_UPA_up.bin</code> &middot; 20,285,440 bytes &middot; GNU tar</dd>
+        <dt>Codename</dt>   <dd><code>RPG69</code> (MC-101) &middot; <code>RPG68</code> (MC-707) &middot; Zen-Core &middot; HW SKU <code>KY022</code></dd>
+        <dt>SoC family</dt> <dd><code>Roland BMC</code> &middot; Cortex-M4/M7 &middot; panel via STM32G0 @115.2k UART/MIDI</dd>
+        <dt>MIDI ID</dt>    <dd><code>0x5E</code> (MC-101) &middot; <code>0x5D</code> (MC-707) &middot; manufacturer <code>0x41</code></dd>
+        <dt>Build</dt>      <dd><code>2023-05-17 22:54:58</code></dd>
+      </dl>
+    </header>
+<section class="section" id="file-layout"><header class="sec-head"><span class="sec-num">0x00</span><h2>File layout</h2></header>
+
+<p><code>MC101_UPA_up.bin</code> is a <strong>GNU tar archive</strong>, not a raw binary. Inside are four component update files for the RPG69 Zen-Core platform:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>File</th>
+<th>Size</th>
+<th>Content</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RPG69_C0A_up.bin</code></td>
+<td>3.5 MB</td>
+<td><code>App1_Main</code> — main CPU application</td>
+<td><strong>Encrypted</strong></td>
+</tr>
+<tr>
+<td><code>RPG69_C0C_up.bin</code></td>
+<td>8 MB</td>
+<td>PCM tone banks + <code>init.lzs</code></td>
+<td>Plaintext QSPI container (12 files)</td>
+</tr>
+<tr>
+<td><code>RPG69_C1A_up.bin</code></td>
+<td>4 MB</td>
+<td><code>idm1.bin</code> + <code>sdram1.bin</code> (DSP code)</td>
+<td>Plaintext QSPI container (2 files)</td>
+</tr>
+<tr>
+<td><code>RPG69_C1C_up.bin</code></td>
+<td>4 MB</td>
+<td>Preset metadata + metronome</td>
+<td>Plaintext QSPI container (16 files)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Each ends with an ASCII tag: <code>Roland RPG69_C0&lt;A|C|X&gt; VER.1.82-BLD.14423 0517 22 &lt;mm&gt; &lt;ss&gt;</code>.</p>
+<p><strong>Naming convention:</strong>
+- <code>C0</code> = Core 0 (main ARM CPU, UI/MIDI/SysEx/parameter engine)
+- <code>C1</code> = Core 1 (DSP / voice engine)
+- <code>A</code> = application (executable)
+- <code>C</code> = content (data, samples, presets)</p>
+
+</section>
+
+<section class="section" id="encrypted-app1-main-c0a-container-format"><header class="sec-head"><span class="sec-num">0x01</span><h2>Encrypted App1_Main (C0A) — container format</h2></header>
+
+<h3>Container header (plaintext, 0x60 bytes)</h3>
+<pre class="code"><code>0x00  &quot;App1_Main&quot;                       (16-byte name)
+0x10  &quot;2023/05/17 22:54&quot;                (build timestamp)
+0x20  &quot;0.010001&quot;                        (payload version)
+0x30  TOC slot (empty, 0xFF-filled)
+0x40  TOC slot (empty)
+0x50  TOC slot (empty)
+0x60  START OF ENCRYPTED PAYLOAD, size 0x003565B0 (8- and 16-aligned)
+end-100  4-byte checksum: 97 EF F5 0B
+end-48   ASCII tag &quot;Roland RPG69_C0A VER.1.82-BLD.14423 0517 22 54 58&quot;
+</code></pre>
+<p>The payload is encrypted and not shipped in a readable form. The decryption key is not present in any firmware update file.</p>
+<p><strong>Load address:</strong> <code>0x60000000</code> (QSPI-XIP region) — this is where the decrypted App1_Main lands at runtime. Consistent with the "internal address 0x60xxxxxx" pointers we see everywhere in <code>sdram1.bin</code>.</p>
+<h3>MC-101 ↔ MC-707 cross-product findings (this session)</h3>
+<p>Cross-checked MC-101 v1.82 (<code>RPG69</code>) against MC-707 v1.82 (<code>RPG68</code>) — same-day build train (2023-05-17 22:54:58 vs 2023-05-18 00:00:21, ~1 hour apart):</p>
+<ul>
+<li><strong>All PCM tone banks, kit banks, preset banks, <code>init.lzs</code>, <code>wromInfo_KY022.bin</code>, metronome samples — byte-identical</strong> (26 files across C0C and C1C containers). Every non-code data blob is shared. The products differ only in codename tag (<code>RPG68</code> vs <code>RPG69</code>) and container header size.</li>
+<li><strong><code>sdram1.bin</code> (Core-1 DSP code) — same source, different link addresses.</strong> 86% of bytes differ, but the diff is dense single-byte changes at Thumb-2 BL target-offset positions — the classic signature of same source recompiled with slightly shifted layout. MC-707's is 536 bytes larger; the extra bytes at the tail are a pointer/relocation table.</li>
+<li><strong><code>idm1.bin</code> differs</strong> — this is instrument-definition metadata, small (242 KB), likely encodes per-device track/pad counts.</li>
+<li><strong><code>App1_Main</code> differs by ~25%</strong> (MC-101: 3.5 MB, MC-707: 4.4 MB) — MC-707 has 8 tracks vs MC-101's 4, more encoders, encoder ring LEDs, motor faders — extra UI code adds up.</li>
+</ul>
+<p><strong>Practical implication:</strong> the DSP engine and all sample/preset content are effectively one product across MC-101 and MC-707. Only the UI layer (encrypted App1_Main) meaningfully differs.</p>
+
+</section>
+
+<section class="section" id="qspi-container-format-c0c-c1a-c1c"><header class="sec-head"><span class="sec-num">0x02</span><h2>QSPI container format (C0C, C1A, C1C)</h2></header>
+
+<p>Same structure across all three plaintext images:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>offset</th>
+<th>size</th>
+<th>field</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x00</td>
+<td>4</td>
+<td>total_size</td>
+<td>—</td>
+</tr>
+<tr>
+<td>0x20</td>
+<td>4</td>
+<td>magic</td>
+<td>"QSPI" + 4 spaces</td>
+</tr>
+<tr>
+<td>0x24</td>
+<td>4</td>
+<td>base_offset</td>
+<td>=0x20</td>
+</tr>
+<tr>
+<td>0x28</td>
+<td>4</td>
+<td>base_offset</td>
+<td>=0x20</td>
+</tr>
+<tr>
+<td>0x2C</td>
+<td>4</td>
+<td>file_count</td>
+<td>number of file entries</td>
+</tr>
+<tr>
+<td>0x30</td>
+<td>28 per entry</td>
+<td>file entries</td>
+<td>(file_count x 28-byte entries, see below)</td>
+</tr>
+<tr>
+<td>0x1000+</td>
+<td>—</td>
+<td>payload files</td>
+<td>page-aligned</td>
+</tr>
+</tbody>
+</table></div>
+<p>Each file entry (28 bytes):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>offset</th>
+<th>size</th>
+<th>field</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+0x00</td>
+<td>16</td>
+<td>name</td>
+<td>NUL-padded, 16-char cap (Roland's limit)</td>
+</tr>
+<tr>
+<td>+0x10</td>
+<td>4</td>
+<td>offset</td>
+<td>relative to container start</td>
+</tr>
+<tr>
+<td>+0x14</td>
+<td>4</td>
+<td>size</td>
+<td>—</td>
+</tr>
+<tr>
+<td>+0x18</td>
+<td>4</td>
+<td>crc16</td>
+<td>stored as 32-bit (top 16 bits zero)</td>
+</tr>
+<tr>
+<td>+0x1C</td>
+<td>4</td>
+<td>reserved</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+<p>Contents:</p>
+<p><strong>C0C — PCM tone/kit banks (12 files, ~7.7 MB)</strong>
+- <code>tone_pcmx_cmn.bi[n]</code>, <code>tone_pcmEx_ky022.bin</code>, <code>tone_pcmEx_rpg68.bin</code>, <code>tone_pcmEx_slgnd.bin</code>, <code>tone_pcmEx_snsyn.bin</code>, <code>tone_pcmEx_i5080.bin</code>
+- <code>kit_pcmx_cmn.bin</code>, <code>kit_pcmx_rpg68.b[in]</code>, <code>inst_pcmx_cmn.bin</code>, <code>inst_pcmx_rpg68.[bin]</code>
+- <code>qspi_ver_def.h</code> — plaintext version stamps
+- <code>init.lzs</code> — factory-init container (see §7)</p>
+<p><strong>C1A — DSP code + init (2 files)</strong>
+- <code>idm1.bin</code> (242 KB) — instrument-def metadata
+- <code>sdram1.bin</code> (3.7 MB) — <strong>Core-1 DSP executable</strong> (the primary target of this RE)</p>
+<p><strong>C1C — Preset banks (16 files, ~1.3 MB)</strong>
+- <code>wromInfo_KY022.b[in]</code> — 64-byte device-ID stub
+- <code>tone_pcmx_test.b[in]</code>, <code>metronome.bin</code>, <code>kit_pcmx_metro.b[in]</code>, <code>inst_pcmx_metro.[bin]</code>
+- <code>spf_muse_*</code> (5 files) — SuperNATURAL preset format banks
+- <code>wpf_muse_*</code> (5 files) — Wave/patch format banks
+- <code>qspi_ver_def.h</code></p>
+<p>Version stamp inside both <code>qspi_ver_def.h</code>: <code>TARGET=PCM-EX</code>, <code>PRM_VER=0.039</code>, <code>QSPI_DATA=0.058</code>.</p>
+
+</section>
+
+<section class="section" id="sdram1bin-core-1-dsp-firmware"><header class="sec-head"><span class="sec-num">0x03</span><h2>sdram1.bin — Core-1 DSP firmware</h2></header>
+
+<h3>Basics</h3>
+<ul>
+<li><strong>CPU:</strong> ARM Cortex-M4/M7 (Thumb-2 only). Confirmed by LDR from <code>0xE000ED88</code> (CPACR — Cortex-M SCB coprocessor register)</li>
+<li><strong>Load base:</strong> <code>0x00000000</code> (in the code-image address space)</li>
+<li><strong>Size:</strong> 3,709,724 bytes = 0x389B1C</li>
+<li><strong>Debug symbols:</strong> intact printf-style format strings throughout (~7,400)</li>
+<li><strong>Discovered functions:</strong> 1,876 by prologue scan; 385+ PLT thunks</li>
+</ul>
+<h3>Memory map (deduced)</h3>
+<pre class="code"><code>0x00000000 — 0x00389B1C   sdram1.bin (Core-1 code, this file)
+0x01100000 — 0x0113_xxxx  Shared kernel / RTOS blob (NOT SHIPPED HERE — probably in Core-0)
+0x20000000 — 0x201x_xxxx  SDRAM (.data/.bss/heap/task queues)
+0x40000000 — 0x40xx_xxxx  Peripherals (GPIO, timers)
+0x41100000                QSPI indirect-read controller
+0x60000000 — 0x611x_xxxx  QSPI-XIP (wave-ROM directory, parameter tables, boot helpers)
+0xE0000000+               Cortex-M System Control / NVIC
+</code></pre>
+<h3>PLT thunk table</h3>
+<p>Range <strong>0x7D474 — 0x7D5xx</strong> (385+ entries). Each entry is a 3-instruction PLT thunk: load a 32-bit address into the ip register (via two 16-bit immediate moves), then branch to it.
+Every <code>bl 0x7DXXX</code> from Core-1 code is really jumping to a shared-kernel function at <code>0x0110xxxx</code>-<code>0x0113xxxx</code>. This is why most utility calls (logger, DMA, ring-buffer, sync, <code>printf</code>) converge on the 0x7Dxxx range. The shared kernel isn't in this update package.</p>
+<p>Selected thunks (resolved):</p>
+<pre class="code"><code>0x7D47E → 0x01102301   printf/log core
+0x7D488 → 0x01102351   log flush
+0x7D4F6 → 0x011212A1   UMDW-send / signal
+0x7D500 → 0x01120D6D   UMDW-flush
+0x7D50A → 0x01129531   formatter used by every debug-print site
+0x7DDB6 → 0x01120ED5   ★ PRM-Edit apply (this is where parameter changes go)
+0x7DC3A → 0x01129C27   buffer clear
+</code></pre>
+
+</section>
+
+<section class="section" id="umdw-inter-core-protocol"><header class="sec-head"><span class="sec-num">0x04</span><h2>UMDW inter-core protocol</h2></header>
+
+<p>Roland's internal <strong>Universal MIDI Datalink Word</strong> — a 32-bit packed message format used for all IPC between Core-0 (main app) and Core-1 (DSP). Every SysEx byte, every parameter edit, every mute command, every DSP error, flows through this pipe.</p>
+<h3>Word layout (32-bit LE)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>bits</th>
+<th>field</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–3</td>
+<td>msg_type</td>
+<td>16-way dispatch (see table below)</td>
+</tr>
+<tr>
+<td>4–7</td>
+<td>route</td>
+<td>0 = default, 1 = PRM-Edit, 7 = SysCmd (alias for 0)</td>
+</tr>
+<tr>
+<td>8–11</td>
+<td>channel</td>
+<td>MIDI channel (0..15) for channel-scoped msgs, sub-opcode for system msgs</td>
+</tr>
+<tr>
+<td>12–15</td>
+<td>(extended)</td>
+<td>usually unused</td>
+</tr>
+<tr>
+<td>16–23</td>
+<td>data1</td>
+<td>note#, CC#, patch#, SysEx byte, error id, ...</td>
+</tr>
+<tr>
+<td>24–31</td>
+<td>data2</td>
+<td>velocity, CC value, aftertouch, SysEx byte, ...</td>
+</tr>
+</tbody>
+</table></div>
+<h3>16-type dispatch (from trace fn 0x1a74e)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>type</th>
+<th>meaning</th>
+<th>debug print</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0, 3, 15</td>
+<td><code>&lt;undef&gt;</code></td>
+<td><code>Block Edit %02Xh</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td>system message</td>
+<td>(subop-dispatched — see §5.1)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>MIST Ctrl (RPN/NRPN?)</td>
+<td><code>Mist Ctrl Dev%3d Num%3d Val%5d</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>SysEx body chunk</td>
+<td><code>SysEx Body %02X %02X %02X</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>SysEx end (1 residual byte)</td>
+<td><code>SysEx End1 %02X</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>SysEx end (2 residual bytes)</td>
+<td><code>SysEx End2 %02X %02X</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>SysEx end (3 residual bytes)</td>
+<td><code>SysEx End3 %02X %02X %02X</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Note Off</td>
+<td><code>Ch%2d Note Off   %s %3d</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Note On (vel=0 → NoteOff)</td>
+<td><code>Ch%2d Note On    %s %3d</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td>Poly Aftertouch</td>
+<td><code>Ch%2d Poly After %s %3d</code></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Control Change</td>
+<td><code>Ch%2d Control Change ...</code></td>
+</tr>
+<tr>
+<td>12</td>
+<td>Program Change</td>
+<td><code>Ch%2d Program Change      %3d</code></td>
+</tr>
+<tr>
+<td>13</td>
+<td>Channel Aftertouch</td>
+<td><code>Ch%2d Ch Aftertouch       %3d</code></td>
+</tr>
+<tr>
+<td>14</td>
+<td>Pitch Bend</td>
+<td><code>Ch%2d Pitch Bend        %5d</code> (signed 14-bit)</td>
+</tr>
+</tbody>
+</table></div>
+<p>SysEx is transported at 3 bytes/word (type 4); when F7 arrives with N residual bytes still in the accumulator, a type 5/6/7 word flushes them (N = 1/2/3).</p>
+<h3>5.1 Type-1 system messages (subops)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>subop</th>
+<th>printed message</th>
+<th>probable meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x0E</td>
+<td><code>CORE1 Error ID=%3d Info=%3d</code></td>
+<td>RTE (real-time error) report</td>
+</tr>
+<tr>
+<td>0x10</td>
+<td><code>CORE1 DSP Level Mon Sw: %d</code></td>
+<td>metering on/off</td>
+</tr>
+<tr>
+<td>0x11</td>
+<td><code>CORE1 Requested to start Mute Off Sequence</code></td>
+<td>unmute begin</td>
+</tr>
+<tr>
+<td>0x12</td>
+<td><code>CORE1 Requested to start Mute On Sequence</code></td>
+<td>mute begin</td>
+</tr>
+<tr>
+<td>0x40</td>
+<td><code>CORE1 DSP Ready</code></td>
+<td>boot-complete signal</td>
+</tr>
+<tr>
+<td>0x41</td>
+<td><em>(silent)</em></td>
+<td>ack</td>
+</tr>
+<tr>
+<td>0x42</td>
+<td><code>CORE1 Mute On Sequence Done</code></td>
+<td>mute complete</td>
+</tr>
+<tr>
+<td>0x43</td>
+<td><code>CORE1 Mute Off Sequence Done</code></td>
+<td>unmute complete</td>
+</tr>
+<tr>
+<td><strong>0x60</strong></td>
+<td><strong><code>Test Mode Request</code></strong></td>
+<td><strong>factory-service entry</strong></td>
+</tr>
+<tr>
+<td><strong>0x61</strong></td>
+<td><code>Test Mode Reply '%c'</code></td>
+<td>factory-service reply</td>
+</tr>
+<tr>
+<td><strong>0xFE</strong></td>
+<td><code>Restart Sound Engine</code></td>
+<td>force DSP restart</td>
+</tr>
+<tr>
+<td>≥0x80</td>
+<td><code>Block Edit %02Xh</code></td>
+<td>parameter-block edit</td>
+</tr>
+</tbody>
+</table></div>
+
+</section>
+
+<section class="section" id="syscmd-receiver-13c-umdwrxsyscmd-fn-0x1b7d4"><header class="sec-head"><span class="sec-num">0x05</span><h2>SysCmd receiver (13C UMDWRxSysCmd) — fn 0x1B7D4</h2></header>
+
+<p>Full receiver task loop. ~600 bytes of Thumb-2 at <strong>0x1B7D4</strong>. Reads UMDW words from queue at RAM <code>0x2008394C</code> via <code>read_umdw()</code> at <code>0x1B730</code>.</p>
+<h3>Dispatch logic</h3>
+<p>The receiver reads 8-byte UMDW words from a queue. The top nibble of byte 0 is the <strong>route</strong>:</p>
+<ul>
+<li><strong>Route 1</strong> → PRM-Edit: forwards the word to the parameter-edit handler via a PLT thunk at <code>0x7DDB6</code> (→ shared kernel <code>0x01120ED5</code>), using a parameter context at RAM <code>0x2009D1B8</code>.</li>
+<li><strong>Route 0 or 7</strong> → SysCmd dispatch: byte 1 is the <strong>subop</strong>, dispatched via a switch table.</li>
+<li><strong>Other routes</strong> → dropped.</li>
+</ul>
+<p>Subop dispatch table:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>subop</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x10</td>
+<td>config: sets flag bit at context+0xF0</td>
+</tr>
+<tr>
+<td>0x11</td>
+<td>handler at <code>0x1406</code></td>
+</tr>
+<tr>
+<td>0x12</td>
+<td>handler at <code>0x13DE</code></td>
+</tr>
+<tr>
+<td>0x13</td>
+<td>11-way sub-dispatch on byte 2 (TBB at <code>0x1B8FE</code>)</td>
+</tr>
+<tr>
+<td>0x20</td>
+<td>bulk/dump-related, calls fn <code>0x25D6A</code> with byte 3</td>
+</tr>
+<tr>
+<td>0x48</td>
+<td>6-way Model/Device query (TBB at <code>0x1B8A0</code>)</td>
+</tr>
+<tr>
+<td>0x4D</td>
+<td>handler at <code>0x2DCAA</code> (audio-format command)</td>
+</tr>
+<tr>
+<td>0x4F</td>
+<td>three sub-calls: <code>0x2A7A2</code>, <code>0x2A7B2</code>, <code>0x2B3E4</code></td>
+</tr>
+<tr>
+<td>0x60</td>
+<td>17-way Test Mode dispatch (TBB at <code>0x1B976</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<h3>6.1 Test Mode subcommands (subop 0x60) — 17 entries</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>subcmd</th>
+<th>dispatch tgt</th>
+<th>handler fn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x00</td>
+<td>0x1B988</td>
+<td>0x75A34 — main test-mode entry (large)</td>
+</tr>
+<tr>
+<td>0x01–0x04</td>
+<td>0x1BA06</td>
+<td>fallthrough / no-op</td>
+</tr>
+<tr>
+<td>0x05</td>
+<td>0x1B9B4</td>
+<td>0x2080C</td>
+</tr>
+<tr>
+<td>0x06</td>
+<td>0x1B9BC</td>
+<td>0x20990</td>
+</tr>
+<tr>
+<td>0x07–0x0A</td>
+<td>0x1B9C4</td>
+<td>0x20A5A</td>
+</tr>
+<tr>
+<td>0x0B</td>
+<td>0x1B9CE</td>
+<td>0x20B26</td>
+</tr>
+<tr>
+<td>0x0C</td>
+<td>0x1B9D6</td>
+<td>0x20BE0</td>
+</tr>
+<tr>
+<td>0x0D</td>
+<td>0x1B9DE</td>
+<td>0x20CAA</td>
+</tr>
+<tr>
+<td>0x0E</td>
+<td>0x1B9E6</td>
+<td>0x20DB0</td>
+</tr>
+<tr>
+<td>0x0F</td>
+<td>0x1B9EE</td>
+<td>0x20E6A</td>
+</tr>
+<tr>
+<td>0x10</td>
+<td>0x1B9F6</td>
+<td>0x20EA2</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>This is the Roland factory test suite.</strong> Community has been asking about the trigger for years (see Roland Clan Forum thread "Factory Test Program - how to activate?", 2020) — the <em>dispatch table</em> is here; the <em>external trigger</em> is in encrypted C0A.</p>
+<h3>6.2 Model/Device query subcommands (subop 0x48) — 6 entries</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>subcmd</th>
+<th>handler fn</th>
+<th>(called with <code>r0 = 0x200A05A8</code> = device-info descriptor obj)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x00</td>
+<td>(self)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>0x01</td>
+<td>0x1BA80</td>
+<td>—</td>
+</tr>
+<tr>
+<td>0x02</td>
+<td>0x2B3E4</td>
+<td>probably Identity Reply</td>
+</tr>
+<tr>
+<td>0x03</td>
+<td>0x2B826</td>
+<td>firmware version</td>
+</tr>
+<tr>
+<td>0x04</td>
+<td>0x2B8CE</td>
+<td>serial# or boot version</td>
+</tr>
+<tr>
+<td>0x05</td>
+<td>0x2B96A</td>
+<td>wave-ROM list / device ID</td>
+</tr>
+</tbody>
+</table></div>
+
+</section>
+
+<section class="section" id="parameter-address-model-pmb"><header class="sec-head"><span class="sec-num">0x06</span><h2>Parameter address model (PMB)</h2></header>
+
+<h3>7.1 Resolver: fn 0x25DA — <code>ParamAddrToName</code></h3>
+<p>Human-readable pretty-printer for any parameter address. Dispatches on <code>type</code> (0..9) via <code>TBB [pc, r1]</code> at 0x25E4.</p>
+<p>The 32-bit address's top byte is a <strong>domain tag</strong> and gets normalized:
+The resolver masks the address to keep only the lower 24 bits, then ORs in <code>0x41000000</code> (Roland's internal namespace tag).</p>
+<h3>7.2 Category tables in QSPI</h3>
+<p>Two <strong>19-entry descriptor tables</strong>. Each entry is 12 bytes <code>{name_ptr, base_addr, size}</code> (corrected from an earlier <code>{prev_ptr, ...}</code> guess by disassembling the resolver at fn <code>0x25da</code>: it loads <code>[entry+4]</code> as base, <code>[entry+8]</code> as size, and on a match loads <code>[entry+0]</code> as the name pointer passed to the debug formatter). The table data is embedded in <code>sdram1.bin</code> as static init content (same pattern as the WROM name table) — it does not need to be read live from QSPI.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>RAM address</th>
+<th>purpose</th>
+<th>file offset (sdram1.bin)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x61096148</code></td>
+<td>32-byte descriptor header; 19 entries begin at <code>0x61096168</code></td>
+<td>header <code>0x96148</code>, entries <code>0x96168</code></td>
+</tr>
+<tr>
+<td><code>0x6109622C</code></td>
+<td>sub-categories header; 11 valid entries begin at <code>0x61096240</code></td>
+<td>header <code>0x9622C</code>, entries <code>0x96240</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The 0x20-byte header at <code>0x61096148</code> holds a CRC16 (<code>0x89DF</code> at +0x00), a count (<code>0x03</code> at +0x14), a QSPI sub-pointer (<code>0x6108C8A4</code> at +0x10), and a debug-string pointer (<code>0x612C6DD8</code> at +0x1C). Iterated linearly to find which region owns a requested address. Full decoded table in <code>analysis/pmb_tables.json</code>.</p>
+<p><strong>Table 1 (primary, 19 entries):</strong> bases step through the <code>0x41</code> namespace in groups of three — a <code>0x10000</code>-size region, a <code>0x3000</code>-size region, and a <code>0x8000</code>/<code>0x4000</code>-size sub-region. The <code>0x10000</code>/<code>0x3000</code> entries carry Roland internal debug names (<code>Wr(1)</code>, <code>Rd(1)</code>, <code>SIO#1</code>, <code>mxmon1</code>, <code>r1</code>, <code>mac0/1</code>, <code>r2</code>, <code>mxmon3</code>, <code>r3</code>, <code>SIO#5</code>, <code>n4</code>, <code>r7</code>); the <code>0x8000</code>/<code>0x4000</code> sub-region entries are unnamed (their name field points into a debug-print string region). Bases: <code>0x4146/44/4A</code>, <code>0x4156/54/5A</code>, <code>0x4166/64/6A</code>, <code>0x4176/74/7A</code>, <code>0x4186/84/8A</code>, <code>0x4196/94/9A</code>, plus a final <code>0x4124</code> region.</p>
+<p><strong>Table 2 (sub-categories, 11 entries):</strong> <code>0x1000</code>-stride regions at <code>0x41110000</code>–<code>0x41138000</code> (the "system block-set A" range), named <code>r7</code>, <code>Wr(0)</code>, <code>r0</code>, <code>fnc1</code>, <code>mxmon2</code>, <code>DRAMIO3</code>, <code>IO4</code>, <code>mxmon0</code>, <code>@mode2</code>, etc. Entries 11+ are padding.</p>
+<p>The name strings live in a packed 8-byte (NUL-padded) table at runtime <code>0x612C6E5C</code> (file <code>0x2C6E5C</code>): <code>Wr(0) Rd(1) Wr(1) SIO#0 DPC0 IPG0 PRG0 DRAMIO0 mac0 fnc0 mxmon0 r0 x0 SIO#1 ...</code>. These are Roland's internal codenames, not user-facing parameter names.</p>
+<h3>7.3 Special address ranges seen in the resolver</h3>
+<pre class="code"><code>0x00110000 — 0x00112000    block-set A
+0x00125000                 block-set B  (mask 0xFFF000)
+0x00011000, 0x00012000     per-part blocks
+0x00013000, 0x00014000     per-part blocks
+0x00112000                 overlay block
+0x00200000                 domain boundary
+</code></pre>
+<h3>7.4 Failure messages</h3>
+<ul>
+<li><code>"Program N/A  %-4s %08lXh"</code> — addr not in any table</li>
+<li><code>"Ill Inst %-4s Idx%2d %08lXh"</code> — illegal instrument index</li>
+</ul>
+
+</section>
+
+<section class="section" id="parameter-edit-path-14c-umdwrxprmedit"><header class="sec-head"><span class="sec-num">0x07</span><h2>Parameter Edit path (14C UMDWRxPRMEdit)</h2></header>
+
+<p>Handled by shared-kernel fn at <strong><code>0x01120ED5</code></strong> (called via PLT thunk <code>0x7DDB6</code>).</p>
+<p>Signature (deduced):
+<code>PRMEdit_Apply</code> takes a parameter context pointer (RAM <code>0x2009D1B8</code>) and the UMDW word, and applies the parameter edit.</p>
+<p>The full UMDW word is passed in; the actual parameter value is encoded in its data1/data2/data3 bytes.</p>
+<h3>8.1 RTE (Real-Time Error) reporter — fn 0x214A</h3>
+<p>When a parameter operation fails, this fn builds a UMDW word with:
+- byte 0: <code>route=1, type=1</code> (system on PRM channel)
+- byte 1: <code>0x0E</code> (RTE opcode)
+- byte 2: <code>error_id</code> (0..4 — from the <code>cmp r1, #5</code> throttling check)
+- byte 3: <code>param_addr &gt;&gt; 24</code> (top byte of failing address — domain tag)</p>
+<p>Sends via UMDW pipe back to Core-0. After 5 RTE errors in a row, <code>str.w r1, [r2, #0x180]</code> writes to <strong><code>0xE000E188</code></strong> = NVIC ICPR (Interrupt Clear-Pending Register) — defensive throttle disables the source interrupt.</p>
+
+</section>
+
+<section class="section" id="wave-rom-wrom-system"><header class="sec-head"><span class="sec-num">0x08</span><h2>Wave-ROM (WROM) system</h2></header>
+
+<h3>9.1 Directory structure</h3>
+<p>Two paired tables in QSPI:</p>
+<ul>
+<li><strong>Name table</strong> at RAM <code>0x612BA22C</code> — 32 × 48-byte entries</li>
+<li><strong>Instance table</strong> at RAM <code>0x612BA82C</code> — 24 × 8-byte entries</li>
+</ul>
+<p><strong>WromNameEntry</strong> (48 bytes per entry, at QSPI <code>0x612BA22C</code>):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>offset</th>
+<th>size</th>
+<th>field</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+0x00</td>
+<td>2</td>
+<td>csum</td>
+<td>CRC16</td>
+</tr>
+<tr>
+<td>+0x02</td>
+<td>2</td>
+<td>reserved</td>
+<td>—</td>
+</tr>
+<tr>
+<td>+0x04</td>
+<td>4</td>
+<td>type_flags</td>
+<td>8=Roland, 12=KY019-legacy, 16=ITGR, 32=third-party</td>
+</tr>
+<tr>
+<td>+0x08</td>
+<td>4</td>
+<td>data_size</td>
+<td>16 or 32 (bytes of content)</td>
+</tr>
+<tr>
+<td>+0x0c</td>
+<td>16</td>
+<td>name</td>
+<td>type=8: ASCII brand/name; type=16 (ITGR): binary per-ROM index/version encoding</td>
+</tr>
+<tr>
+<td>+0x1c</td>
+<td>16</td>
+<td>version</td>
+<td>ASCII version/identifier string (NOT a hash)</td>
+</tr>
+<tr>
+<td>+0x2c</td>
+<td>4</td>
+<td>qspi_addr</td>
+<td>QSPI address of ROM data</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>WromInstance</strong> (8 bytes per entry, at QSPI <code>0x612BA82C</code>):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>offset</th>
+<th>size</th>
+<th>field</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+0x00</td>
+<td>2</td>
+<td>lo</td>
+<td>bank index low</td>
+</tr>
+<tr>
+<td>+0x02</td>
+<td>2</td>
+<td>hi</td>
+<td>bank index high</td>
+</tr>
+<tr>
+<td>+0x04</td>
+<td>4</td>
+<td>addr</td>
+<td>QSPI address of instance data</td>
+</tr>
+</tbody>
+</table></div>
+<h3>9.2 The 30 catalogued ROM banks (from file offset 0x2BA250)</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>type</th>
+<th>brand/name</th>
+<th>version/note</th>
+<th>qspi_addr</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>8 (Roland)</td>
+<td><code>RolandPCMX</code></td>
+<td>—</td>
+<td>0x612D5FC4</td>
+</tr>
+<tr>
+<td>1</td>
+<td>8 (Roland)</td>
+<td><code>RolandPCM-EX</code></td>
+<td>—</td>
+<td>0x612D5E28</td>
+</tr>
+<tr>
+<td>2–17</td>
+<td>16 (ITGR)</td>
+<td><code>ITGR7 WRom00v100</code> … <code>WRom15v100</code></td>
+<td>+0x1c is the ASCII version string <code>ITGR7 WRomNNv100</code> (WRom03 is the only <code>v101</code>); +0x0c is a binary per-ROM index/version encoding, not a hash</td>
+<td>0x612D5E04..0x612D604C</td>
+</tr>
+<tr>
+<td>18</td>
+<td>32 (3rd)</td>
+<td><code>SB06 ROM17 008</code></td>
+<td>—</td>
+<td>0x612D5FB8</td>
+</tr>
+<tr>
+<td>19</td>
+<td>8 (Roland)</td>
+<td><code>RolandTEST ROM0</code></td>
+<td><code>1.0001MAKE COM</code></td>
+<td>0x612D600C</td>
+</tr>
+<tr>
+<td>20</td>
+<td>8 (Roland)</td>
+<td><code>RolandKY022</code></td>
+<td><code>1.0001VTW</code></td>
+<td>0x612D5F3C</td>
+</tr>
+<tr>
+<td>21</td>
+<td>8 (Roland)</td>
+<td><code>RolandVDN_BMC</code></td>
+<td>—</td>
+<td>0x612D5FA0</td>
+</tr>
+<tr>
+<td>22–24</td>
+<td>12 (KY019)</td>
+<td><code>ndKY019 EXP0010/0020/0030</code></td>
+<td>—</td>
+<td>0x612D5FA8..5FEC</td>
+</tr>
+<tr>
+<td>25–26</td>
+<td>32 (3rd)</td>
+<td><code>SuperiorGrd CD00/MI00</code></td>
+<td>—</td>
+<td>0x612D5F44/5F90</td>
+</tr>
+<tr>
+<td>27</td>
+<td>8 (Roland)</td>
+<td><code>RolandRPG68</code></td>
+<td>—</td>
+<td>0x612D5FE4</td>
+</tr>
+<tr>
+<td>28</td>
+<td>8 (Roland)</td>
+<td><code>RolandVEXP_760EP</code></td>
+<td>—</td>
+<td>0x612D5FDC</td>
+</tr>
+<tr>
+<td>29</td>
+<td>8 (Roland)</td>
+<td><code>RolandPCMEX SNAP</code></td>
+<td>—</td>
+<td>0x612D5F88</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>KY019</strong> was a predecessor product (JD-Xi family); the MC-101 firmware still carries slots to load KY019 expansion banks. <strong>ITGR7</strong> = Integra-7-derived ROM series. <strong>SB06</strong> = Roland internal ROM series. <strong>SuperiorGrd</strong> = Superior Grand piano sample bank. <strong>V-EXP</strong> = Virtual Expansion.</p>
+<h3>9.3 Validator loop — fn 0x76B20</h3>
+<p><strong>CheckWaveROM</strong> (fn at <code>0x76B20</code>): Iterates 24 wave-ROM banks. For each bank, reads the instance directory at QSPI <code>0x612BA82C</code>, resolves the ROM ID from the instance address via <code>WROM_GetIdFromAddr</code> (fn <code>0x768A8</code>), and looks up the name entry at QSPI <code>0x612BA22C</code>. Valid banks (ID 0-31 with non-empty name) are counted and their IDs stored in a bank→ID map at RAM <code>0x200A7708</code>. Prints progress and a final valid-count summary.</p>
+<h3>9.4 QSPI indirect-read peripheral (used by validator)</h3>
+<p><strong>Register block base: <code>0x41100000</code></strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>offset</th>
+<th>name</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+0xE0</td>
+<td>ADDR</td>
+<td>write address to read</td>
+</tr>
+<tr>
+<td>+0xE4</td>
+<td>STAT</td>
+<td>bit 31 = BUSY</td>
+</tr>
+<tr>
+<td>+0xE8</td>
+<td>DATA</td>
+<td>read 16 bits (auto-increments address)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Manually unrolled 5× polling loop for performance.</p>
+<h3>9.5 Sample descriptor arrays (from fns 0x76C84 / 0x76C9A)</h3>
+<p><strong>WROM_GetSampleByIdx</strong>: Returns a pointer to sample data at QSPI <code>0x61700000</code> + idx × 40 (40-byte stride). Caps at 1000 entries. An alternate variant caps at 500 (0x1F4) — likely a different category (user samples).</p>
+<p><strong>QSPI <code>0x61700000</code> + <code>idx*40</code></strong> = per-sample descriptor. Up to 1000 samples per bank.</p>
+
+</section>
+
+<section class="section" id="boot-init-sequence"><header class="sec-head"><span class="sec-num">0x09</span><h2>Boot / init sequence</h2></header>
+
+<h3>10.1 Entry</h3>
+<p><strong>_reset</strong> (at file offset 0x0020): Calls the local loader function, then calls a PLT thunk at <code>0x7D474</code> which jumps to the shared kernel main entry at <code>0x011004D7</code>. Never returns.</p>
+<h3>10.2 PIC section-init loader (0x0028)</h3>
+<p><strong>loader</strong>: Reads a section table at file offset 0x54 (relative to the section table start). Each 16-byte entry contains: source address, destination address, destination end, and a function pointer. The function pointer is decoded as either a PIC offset (if bit 0 is set, subtracted from an anchor) or an absolute Thumb address. Each entry's function is called with (src, dst, dst_end) to copy/initialize a section. The loop continues until the cursor reaches the end marker.</p>
+<h3>10.3 Built-in copy functions</h3>
+<ul>
+<li><strong><code>0x62</code></strong> — Roland-LZS decompressor (see §11)</li>
+<li><strong><code>0xB8</code></strong> — fast 16-byte-block memcpy (LDM/STM <code>{r3,r4,r5,r6}</code>)</li>
+</ul>
+<p>Additional copy fns for boot live in QSPI at <strong><code>0x610000xx</code></strong> (see sample sections below).</p>
+<h3>10.4 Sample sections from the table</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>src</th>
+<th>dst</th>
+<th>size</th>
+<th>copy fn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x01138748</code></td>
+<td><code>0x20080000</code></td>
+<td>140 B</td>
+<td><code>0x61000098</code> (QSPI)</td>
+</tr>
+<tr>
+<td><code>0x011387D4</code></td>
+<td><code>0x2008008C</code></td>
+<td>~23 KB</td>
+<td><code>0x6100003C</code> (QSPI, LZS?)</td>
+</tr>
+<tr>
+<td><code>0x0113B04C</code></td>
+<td><code>0xE0043000</code></td>
+<td>56 B</td>
+<td><code>0x61000098</code> (into System Control!)</td>
+</tr>
+<tr>
+<td><code>0x61389B14</code></td>
+<td><code>0x61400000</code></td>
+<td>4 B</td>
+<td><code>0x61000098</code></td>
+</tr>
+<tr>
+<td><code>0x61389B18</code></td>
+<td><code>0x617FFFFC</code></td>
+<td>4 B</td>
+<td><code>0x61000098</code> (poke QSPI-XIP end)</td>
+</tr>
+<tr>
+<td><code>0x0113B04C</code></td>
+<td><code>0x20085BBC</code></td>
+<td>~144 KB</td>
+<td><code>0x61000098</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Sources span the shared kernel image and QSPI; destinations include RAM, a peripheral (System Control at 0xE0043000), and even QSPI-XIP config pokes.</p>
+
+</section>
+
+<section class="section" id="roland-lzs-decompressor-fn-0x62"><header class="sec-head"><span class="sec-num">0x0A</span><h2>Roland-LZS decompressor — fn 0x62</h2></header>
+
+<p>Reverse-engineered from the Thumb-2 code at file offset 0x62:</p>
+<pre class="code"><code>per token byte T:
+  lit_len   = T &amp; 7            (if 0, extended by next byte)
+  copy_raw  = T &gt;&gt; 4           (if 0, extended by next byte)
+  copy (lit_len - 1) literal bytes from src to dst
+  if T &amp; 8:  read dist byte,  copy (copy_raw + 2) bytes from dst-dist
+  else:      write copy_raw zero bytes
+</code></pre>
+<p><strong>Note on <code>init.lzs</code> inside C0C:</strong> per ConvertWithMoss's <code>MC707_FORMAT.md</code> §8, <code>init.lzs</code> uses <strong>textbook Okumura LZSS with a 4096-byte ring buffer</strong> (the classic 1989 Haruhiko Okumura algorithm), not the Roland-specific variant we analyzed from <code>sdram1.bin</code> §11. The earlier decoder failed because the LZSS stream starts at <strong>file offset 0x20</strong> (the first 32 bytes are a container header, not the stream), the ring buffer is pre-filled with <strong>zeros</strong> (not 0x20 spaces), and the match length is <code>(hi &amp; 0x0F) + 3</code>. A working decoder is in <code>tools/init_lzs_decode.py</code>. <strong>Decompression verified (2026-08-16):</strong> 969,045 bytes → exactly <strong>8,153,245 bytes</strong> (matching ConvertWithMoss's documented size), header <code>0x007E</code> + <code>PRJ5</code>, TOC matches the documented layout byte-for-byte (<code>PRJa</code>@0x80/0x634090, <code>STPa</code>@0x634110/0x210, <code>SYSa</code>@0x634320/0x210, <code>USRa</code>@0x634530/0x191420, <code>LPPa</code>@0x7C5950/0x810, <code>LPDa</code>@0x7C6160/0x820, <code>USDa</code>@0x7C6980/0x10). Content confirmed as the factory INIT PROJECT: project name <code>"INIT PRJ"</code>, 64× <code>"InitTone"</code>, <code>"InitDrum"</code>, 0 user samples. Output written to <code>extracted/C0C/init_project.mpj</code>.</p>
+
+</section>
+
+<section class="section" id="external-sysex-from-community-re-corroborated"><header class="sec-head"><span class="sec-num">0x0B</span><h2>External SysEx (from community RE, corroborated)</h2></header>
+
+<h3>12.1 Wire format</h3>
+<p>Standard Roland DT1/RQ1 over MIDI:</p>
+<pre class="code"><code>F0 41 10 00 00 00 &lt;MODEL&gt; 11 &lt;A3 A2 A1 A0&gt; &lt;S3 S2 S1 S0&gt; &lt;CK&gt; F7    ← RQ1 read
+F0 41 10 00 00 00 &lt;MODEL&gt; 12 &lt;A3 A2 A1 A0&gt; &lt;data...&gt;       &lt;CK&gt; F7    ← DT1 write
+
+MODEL:  MC-101 = 0x5E     MC-707 = 0x5D
+CK:     128 - (sum_of_addr_and_data % 128)
+</code></pre>
+<p>All bytes after F0 are 7-bit clean. <strong>Multi-byte values are nibble-packed</strong>: a 4-byte value ships as 4 bytes each carrying 4 bits.</p>
+<h3>12.2 External address map (mcpoker.py, verified via dumps)</h3>
+<p>MC-101 clip-tone bases (16 clips per track × 0x20000 stride + 1 track sound):</p>
+<pre class="code"><code>Track 1: 0x30000000    Track 5: 0x31080000
+Track 2: 0x30220000    Track 6: 0x312A0000
+Track 3: 0x30440000    Track 7: 0x314C0000
+Track 4: 0x30660000    Track 8: 0x316E0000
+</code></pre>
+<p>Per-tone offsets:
+- <code>+0x0018</code> — coarse tune (16..112)
+- <code>+0x2000/2100/2200/2300</code> — Partial 1..4 bases
+- <code>+0x0020</code> from partial base — waveform-L index (0..16383, 4-byte nibble-packed)</p>
+<h3>12.3 How external SysEx maps to our internal RE</h3>
+<ul>
+<li>Model ID <strong><code>0x5E</code></strong> ↔ internal hardware SKU <strong><code>KY022</code></strong> — same product.</li>
+<li>External address <code>0x30xxxxxx</code> → Core-0 translates → UMDW word with route-nibble 1 (PRM-Edit) → shared-kernel fn <code>0x01120ED5</code>.</li>
+<li>The <code>bic addr, #0xFF000000</code> / <code>orr #0x41000000</code> in the internal resolver strips the SysEx domain tag <code>0x30</code> and re-tags with <code>0x41</code> (Roland manufacturer namespace).</li>
+<li>Nibble packing explains the <code>ubfx r0, r4, #0x10, #8</code> / <code>ubfx r3, r4, #0x18, #8</code> bit-field extracts in every UMDW handler — the value arrives in 4-bit chunks and has to be reassembled.</li>
+</ul>
+<h3>12.4 Live verification on a connected MC-101 (2026-08-16)</h3>
+<p><code>tools/pmb_probe.py</code> was run against a connected MC-101 (USB Generic / class-compliant mode, model ID <code>0x5E</code>). Read-only RQ1 only — no DT1 writes were sent. 45/120 probes responded across 5 domain tags. Full results in <code>analysis/pmb_probe_live.md</code>.</p>
+<p><strong>Confirmed live:</strong> all 8 track clip-tone bases (<code>0x30020000</code>–<code>0x316E0000</code>) and the 4 partial offsets (<code>+0x2000/2100/2200/2300</code>).</p>
+<p><strong>New finding — the address top byte is a layer selector, not just a namespace tag.</strong> Probing the same base under different top bytes returns different data layers:
+- <code>0x30xxxxxx</code> → <strong>tone name</strong> layer (e.g. Track 1 clip 1 → <code>"INTRO"</code>, Track 2 clip 1 → <code>"INIT TONE"</code>)
+- <code>0x20xxxxxx</code> → <strong>clip / scene name</strong> layer (e.g. Track 1 clip 1 → <code>"TriggerFnktn"</code>, Track 5 clip 1 → <code>"DROP A"</code>, <code>0x00200000</code> → <code>"BREAKDOWN"</code>)
+- <code>0x10</code> / <code>0x40</code> → shorter alternate framings (29–32 B)</p>
+<p>The community docs treat <code>0x30</code> as the only external space; live probing shows <code>0x20</code> exposes a parallel clip/scene-name layer at the same bases.</p>
+<p><strong>Internal regions:</strong> two RE-only internal addresses are externally reachable — <code>0x00110000</code> (System block-set A) and <code>0x00200000</code> (domain boundary), via tags <code>0x20</code>/<code>0x40</code>. The rest of the internal system/per-part regions (<code>0x00125000</code>, <code>0x00011000</code>–<code>0x00014000</code>, <code>0x00112000</code>) are <strong>not</strong> exposed externally — confirming they live behind Core-0's SysEx→UMDW translator as internal Core-1 regions.</p>
+<p><strong>Full clip-grid scan:</strong> <code>tools/clip_grid_scan.py</code> probed all 128 clip addresses (8 tracks × 16 clips) under both layers. The 0x20 layer exposes the <strong>full clip/scene-name grid</strong> over read-only SysEx — a new capability not in community tools. The device's project has 7 named sections (INTRO → DROP A → DROP B → DANCE HALL → OUTRO → RHYTHM A → RHYTHM B) on a stride-4 pattern across Tracks 1–2, with Track 8 mirroring Track 1. Tracks 5–7 are completely empty. The 0x30 layer returns tone names (11 clips with "INIT TONE", rest empty/spaces). Results in <code>analysis/pmb_probe_live.md</code> and <code>clip_grid.csv</code>.</p>
+<p><strong>QSPI parameter-name tables:</strong> probed internal QSPI/RAM addresses (octave-label table, PMB table bases, name string table) — all silent. The external SysEx translator only routes to PMB-table parameter blocks, not raw internal data arrays. The RAM note-name array at <code>0x200837C4</code> is fundamentally inaccessible (low byte <code>0xC4</code> has bit 7 set, invalid in 7-bit SysEx).</p>
+<p><strong>Four-layer domain-tag model:</strong> systematic probing under all four tags (0x10/0x20/0x30/0x40) with 64-byte reads reveals a clean 4-layer structure:
+- <code>0x10</code> — <strong>project name</strong> layer: single block at <code>0x10000000</code>, returns <code>"TriggerFnktn_011"</code> (project name + version)
+- <code>0x20</code> — <strong>clip/scene name + clip data</strong> layer: per-clip 8×16 grid (mapped above)
+- <code>0x30</code> — <strong>tone name + tone params</strong> layer: per-clip (the documented external space)
+- <code>0x40</code> — <strong>project/system metadata</strong> layer: same 60-byte block at every address (tempo, time signature, etc.)</p>
+<p>The community tools (mcpoker, mc-programmer) only use <code>0x30</code>. The <code>0x20</code> and <code>0x10</code> layers are new discoveries enabling read-only project backup over SysEx.</p>
+<p><strong>DT1 write verification:</strong> <code>tools/dt1_write.py</code> confirmed that DT1 writes to the <code>0x20</code> (clip) and <code>0x10</code> (project) layers work — clip names and the project name can be renamed over SysEx. Writes are surgical (only the name field is overwritten; surrounding binary data is preserved). Name field sizes: clip = 12 bytes, project = 16 bytes (ASCII, space-padded). DT1 writes are not acknowledged by the device but are verifiable by RQ1 read-back after ~300ms. Combined with the read-only clip-grid scan, the MC-101's project structure can be <strong>both read and written over SysEx</strong> — enabling full project backup/restore without the <code>.mpj</code> file.</p>
+
+</section>
+
+<section class="section" id="12a-community-landscape-convergent-re-efforts"><header class="sec-head"><h2>12a. Community landscape (convergent RE efforts)</h2></header>
+
+<p>Cross-referenced August 2026. Multiple independent projects work around the same firmware, each choosing to focus on external SysEx or backup-file editing instead of the encrypted App1_Main. <strong>No public documentation exists for the encrypted payload's contents</strong> across the community.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Author</th>
+<th>Scope</th>
+<th>Firmware crypto?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/douglas-carmichael/mc-programmer"><code>mc-programmer</code></a></td>
+<td>douglas-carmichael</td>
+<td>389 named ZEN-Core params (auto-gen from Jupiter-X MIDI Impl), full sequencer, dump/restore, Python + Swift, ~112 tests</td>
+<td>no — SysEx only</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Locriana/mcpoker"><code>mcpoker</code></a></td>
+<td>Locriana</td>
+<td>Experimental Python SysEx scanner; discovered clip-tone base addresses; nibble-packing docs</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/DrKnackeratorStrikesAgain/Roland-Structured-Storage"><code>Roland-Structured-Storage</code></a></td>
+<td>DrKnackerator</td>
+<td>JS library for MC/SH-4d/Fantom project-file container format</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/DrKnackerator/Roland-ZenCore-file-format"><code>Roland-ZenCore-file-format</code></a></td>
+<td>DrKnackerator</td>
+<td>Format docs across Zenology/MC/Jupiter-X/Fantom/Juno X</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/git-moss/ConvertWithMoss"><code>ConvertWithMoss</code></a> <code>MC707_FORMAT.md</code></td>
+<td>git-moss</td>
+<td>Deep .mpj project format docs, tone/kit/sample records, LZSS decode of init.lzs</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ajmwagar/cowbell"><code>tr-format</code> / <code>tr-studio</code></a></td>
+<td>ajmwagar</td>
+<td>Rust: TR-6S / TR-8S user data (Script.xml-driven)</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ricardofeynman/Awesome-MC-707"><code>Awesome-MC-707</code></a></td>
+<td>ricardofeynman</td>
+<td>Community index of MC-707/101 tips &amp; tools</td>
+<td>n/a</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Convergent independent finding</strong>: @ajmwagar's <a href="https://github.com/ajmwagar/blog/blob/master/content/post/tr6s-part1.md">TR-6S Part 1</a> (August 2026) reached identical conclusions on the TR-6S — same tar + <code>App1_Main</code> container format. He additionally identified:
+- <strong>BMC SoC</strong> is the shared platform across MC-101/707/TR-8S/TR-6S/Fantom/Jupiter-X
+- <strong>STM32G0 panel</strong> controller communicates via 115200-baud UART speaking MIDI byte streams
+- <strong>AIRA Compacts (T-8, J-6, E-4) use a different <code>E4E</code> SoC</strong> — separate product family</p>
+<p><strong>Community open request</strong>: firmware v1.51 for TR-6S is being held back by Roland (they delete old versions on release). Same policy affects MC-101 — only latest firmware is publicly downloadable.</p>
+
+</section>
+
+<section class="section" id="what-we-contributed-beyond-the-existing-community-re"><header class="sec-head"><span class="sec-num">0x0C</span><h2>What we contributed beyond the existing community RE</h2></header>
+
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>Community had?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model ID 0x5E, DT1/RQ1 wire format, nibble packing</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>Clip-tone base addresses 0x30xxxxxx</td>
+<td>✔ (partial)</td>
+</tr>
+<tr>
+<td>Per-partial parameter offsets</td>
+<td>✔ (dozens)</td>
+</tr>
+<tr>
+<td><strong>19-category PMB tables at 0x61096148 / 0x6109622C</strong></td>
+<td>✘ new</td>
+</tr>
+<tr>
+<td><strong>Full UMDW inter-core protocol (16 types + sub-op set)</strong></td>
+<td>✘ new</td>
+</tr>
+<tr>
+<td><strong>Factory Test-Mode dispatch (17 subcmds under UMDW 0x60)</strong></td>
+<td>✘ new — long-open community question</td>
+</tr>
+<tr>
+<td><strong>Model/Device query dispatch (6 subcmds under UMDW 0x48)</strong></td>
+<td>✘ new</td>
+</tr>
+<tr>
+<td><strong>Wave-ROM directory + 30 catalogued banks</strong></td>
+<td>✘ new</td>
+</tr>
+<tr>
+<td><strong>Roland-LZS decompressor algorithm</strong></td>
+<td>✘ new</td>
+</tr>
+<tr>
+<td><strong><code>RolandVEXP_760EP</code>, <code>SuperiorGrd</code>, <code>SB06 ROM17 008</code> in ROM table</strong></td>
+<td>✘ new</td>
+</tr>
+<tr>
+<td><strong>PLT thunk table → shared kernel at 0x01100000+</strong></td>
+<td>✘ new</td>
+</tr>
+<tr>
+<td><strong>Address-space &amp; memory map</strong></td>
+<td>✘ new</td>
+</tr>
+<tr>
+<td><strong>Boot/init loader mechanics + section table format</strong></td>
+<td>✘ new</td>
+</tr>
+</tbody>
+</table></div>
+
+</section>
+
+<section class="section" id="files-on-disk"><header class="sec-head"><span class="sec-num">0x0D</span><h2>Files on disk</h2></header>
+
+<pre class="code"><code>mc101-firmware-re/
+├── analysis/          static-analysis outputs (our work, not Roland binaries)
+│   ├── functions.json     discovered functions (prologue + leaf + thunk)
+│   ├── string_xrefs.json  per-string owner-function map
+│   ├── callgraph.json     BL-target indices
+│   └── pmb_tables.json    decoded PMB parameter-region tables
+├── tools/             SysEx probes and analysis scripts
+└── REPORT.md          this document
+</code></pre>
+
+</section>
+
+<section class="section" id="practical-next-steps"><header class="sec-head"><span class="sec-num">0x0E</span><h2>Practical next steps</h2></header>
+
+<ol>
+<li><strong>Live-verify PMB tables</strong> — point <code>mcpoker.py</code>'s <code>dump()</code> scan at each of the 19 category-table regions we identified. Should give instant confirmation of the parameter map.</li>
+<li><strong>Test-mode trigger hunt</strong> — send DT1 writes to plausibly-magic addresses and watch UMDW for route=1/subop=0x60 signatures. If any address triggers Test Mode Request, users unlock factory diagnostics for the first time.</li>
+<li><strong>Publish</strong> — the Roland Clan Forum "documenting roland file formats" thread is the natural venue.</li>
+</ol>
+
+</section>
+
+<section class="section" id="session-tooling-notes"><header class="sec-head"><span class="sec-num">0x0F</span><h2>Session tooling notes</h2></header>
+
+<ul>
+<li>Disassembler: Capstone (Python) with <code>CS_ARCH_ARM | CS_MODE_THUMB</code></li>
+<li>Function discovery: prologue-scan for <code>push {..., lr}</code> (Thumb-1: <code>xx B5</code>) and Thumb-2 <code>stmdb sp!, {..., lr}</code> (<code>2D E9 xx xx</code> with bit 14 set in reglist)</li>
+<li>String xref resolution: recursive-descent from each prologue, tracking ADR (PC-relative) and LDR-lit (pool loads) — pure u32 pool scan misses ~90% of refs because most strings are non-4-aligned and addressed via ADR</li>
+<li>TBB (Table Branch Byte): pattern <code>DF E8 0m F0</code> — table starts at PC+4, entries are 1-byte offsets (×2 for real branch delta)</li>
+<li>PLT thunk detection: <code>movw ip, #lo</code> / <code>movt ip, #hi</code> / <code>bx ip</code> triplet</li>
+</ul>
+<p>Total session tool calls: ~30 Bash/disasm runs. Total artifacts written: this file plus 4 JSON indices.</p>
+
+</section>
+    <footer class="foot">
+      <span>Generated from <code>REPORT.md</code> &middot; <span class="mark">MC-101 SysEx &amp; Protocol Analysis</span></span>
+      <span>EU Directive 2009/24/EC &middot; interoperability research</span>
+    </footer>
+  </main>
+  <aside class="toc">
+    <div class="toc-label">Contents</div>
+<a href="#file-layout"><span class="toc-num">0x00</span><span class="toc-title">File layout</span></a>
+<a href="#encrypted-app1-main-c0a-container-format"><span class="toc-num">0x01</span><span class="toc-title">Encrypted App1_Main (C0A) — container format</span></a>
+<a href="#qspi-container-format-c0c-c1a-c1c"><span class="toc-num">0x02</span><span class="toc-title">QSPI container format (C0C, C1A, C1C)</span></a>
+<a href="#sdram1bin-core-1-dsp-firmware"><span class="toc-num">0x03</span><span class="toc-title">sdram1.bin — Core-1 DSP firmware</span></a>
+<a href="#umdw-inter-core-protocol"><span class="toc-num">0x04</span><span class="toc-title">UMDW inter-core protocol</span></a>
+<a href="#syscmd-receiver-13c-umdwrxsyscmd-fn-0x1b7d4"><span class="toc-num">0x05</span><span class="toc-title">SysCmd receiver (13C UMDWRxSysCmd) — fn 0x1B7D4</span></a>
+<a href="#parameter-address-model-pmb"><span class="toc-num">0x06</span><span class="toc-title">Parameter address model (PMB)</span></a>
+<a href="#parameter-edit-path-14c-umdwrxprmedit"><span class="toc-num">0x07</span><span class="toc-title">Parameter Edit path (14C UMDWRxPRMEdit)</span></a>
+<a href="#wave-rom-wrom-system"><span class="toc-num">0x08</span><span class="toc-title">Wave-ROM (WROM) system</span></a>
+<a href="#boot-init-sequence"><span class="toc-num">0x09</span><span class="toc-title">Boot / init sequence</span></a>
+<a href="#roland-lzs-decompressor-fn-0x62"><span class="toc-num">0x0A</span><span class="toc-title">Roland-LZS decompressor — fn 0x62</span></a>
+<a href="#external-sysex-from-community-re-corroborated"><span class="toc-num">0x0B</span><span class="toc-title">External SysEx (from community RE, corroborated)</span></a>
+<a href="#12a-community-landscape-convergent-re-efforts"><span class="toc-num"></span><span class="toc-title">12a. Community landscape (convergent RE efforts)</span></a>
+<a href="#what-we-contributed-beyond-the-existing-community-re"><span class="toc-num">0x0C</span><span class="toc-title">What we contributed beyond the existing community RE</span></a>
+<a href="#files-on-disk"><span class="toc-num">0x0D</span><span class="toc-title">Files on disk</span></a>
+<a href="#practical-next-steps"><span class="toc-num">0x0E</span><span class="toc-title">Practical next steps</span></a>
+<a href="#session-tooling-notes"><span class="toc-num">0x0F</span><span class="toc-title">Session tooling notes</span></a>
+  </aside>
+</div>
+</body>
+</html>

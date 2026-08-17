@@ -1,0 +1,637 @@
+{
+ "0x1080": {
+  "str": "%08d: Check CORE0 Exists = %s\n",
+  "n_pool_refs": 80,
+  "n_functions": 18,
+  "owners": [
+   "0x9e1a4",
+   "0xe02d8",
+   "0xfd438",
+   "0x10cdb0",
+   "0x14e874",
+   "0x16d214",
+   "0x187de4",
+   "0x18eb80",
+   "0x1bab38",
+   "0x1cf7ec",
+   "0x1d0578",
+   "0x1d628e",
+   "0x1d6e14",
+   "0x20ca00",
+   "0x21e780",
+   "0x24d0a4",
+   "0x25cc20",
+   "0x28faac"
+  ]
+ },
+ "0x1920": {
+  "str": "Idx  Source      Dest        Count  Curr        Next\n",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xe02d8"
+  ]
+ },
+ "0x19c8": {
+  "str": "[%2d] %3d %3d %s\n",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x1e03": {
+  "str": "aDSP%c VerifyProg() = ",
+  "n_pool_refs": 2,
+  "n_functions": 1,
+  "owners": [
+   "0x8a404"
+  ]
+ },
+ "0x1e28": {
+  "str": "DSP%c VerifyDrProg() = ",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x1fd6": {
+  "str": "$L&M",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x23d3": {
+  "str": " %08d: ***** DSP Error %s:%d %s\n",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x2e4e38"
+  ]
+ },
+ "0x23fc": {
+  "str": "%08d: ***** DSP RTE%d\n",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x2414": {
+  "str": "PRM= %08Xh %s\n",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x2528": {
+  "str": "%08d: ***** Error Can't Assign LFO\n",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x254c": {
+  "str": "%08d: ***** FIFO Error %d '%s\n",
+  "n_pool_refs": 2,
+  "n_functions": 2,
+  "owners": [
+   "0xabbb4",
+   "0xc5674"
+  ]
+ },
+ "0x295c": {
+  "str": "Program N/A    %-4s %08lXh",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xe02d8"
+  ]
+ },
+ "0x2978": {
+  "str": "Ill Inst %-4s Idx%2d %08lXh",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xe02d8"
+  ]
+ },
+ "0x29c0": {
+  "str": "%-4s %02Xh=%-14s %08lXh",
+  "n_pool_refs": 21,
+  "n_functions": 3,
+  "owners": [
+   "0xc5674",
+   "0xe02d8",
+   "0x28faac"
+  ]
+ },
+ "0x29d8": {
+  "str": "Illegal CPU Write   %08Xh",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xe02d8"
+  ]
+ },
+ "0x2a10": {
+  "str": "Zero Divide    %-4s %08Xh",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xe02d8"
+  ]
+ },
+ "0x2a68": {
+  "str": "PDH Access (DSP %c%c%c%c%c%c) %04Xh",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xe02d8"
+  ]
+ },
+ "0x2a8c": {
+  "str": "TBW Access (DSP %c%c%c%c%c%c) %04Xh",
+  "n_pool_refs": 2,
+  "n_functions": 2,
+  "owners": [
+   "0xc5674",
+   "0xe02d8"
+  ]
+ },
+ "0x3dc8": {
+  "str": "%04lX",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x421c": {
+  "str": "EZHMI",
+  "n_pool_refs": 4,
+  "n_functions": 4,
+  "owners": [
+   "0x16d214",
+   "0x187de4",
+   "0x20ca00",
+   "0x25cc20"
+  ]
+ },
+ "0x43f0": {
+  "str": "5#*F!F",
+  "n_pool_refs": 3,
+  "n_functions": 3,
+  "owners": [
+   "0x10cdb0",
+   "0x14e874",
+   "0x25cc20"
+  ]
+ },
+ "0x442c": {
+  "str": "5#*F!F",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x25cc20"
+  ]
+ },
+ "0x44a2": {
+  "str": "5#ZF!F",
+  "n_pool_refs": 2,
+  "n_functions": 2,
+  "owners": [
+   "0x16d214",
+   "0x20ca00"
+  ]
+ },
+ "0x44f6": {
+  "str": "5#ZF!F",
+  "n_pool_refs": 3,
+  "n_functions": 3,
+  "owners": [
+   "0xc5674",
+   "0x25cc20",
+   "0x28faac"
+  ]
+ },
+ "0x4549": {
+  "str": "\t\t  ",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x14e874"
+  ]
+ },
+ "0x4698": {
+  "str": " Adrs Wave-ROM ID  Ver    Description\n",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x46c0": {
+  "str": " ---- ------------ ------ ----------------\n",
+  "n_pool_refs": 2,
+  "n_functions": 2,
+  "owners": [
+   "0xc5674",
+   "0x10cdb0"
+  ]
+ },
+ "0x4708": {
+  "str": " QSPI Version\n",
+  "n_pool_refs": 47,
+  "n_functions": 47,
+  "owners": [
+   "0x1aefa",
+   "0x349f6",
+   "0x34d86",
+   "0x34f50",
+   "0x35692",
+   "0x35b34",
+   "0x37ede",
+   "0x37f38",
+   "0x38948",
+   "0x41378",
+   "0x4148c",
+   "0x41538",
+   "0x7e70c",
+   "0x7ea30",
+   "0x7ecb4",
+   "0x7ed20",
+   "0x7f444",
+   "0x7f894",
+   "0x7fe24",
+   "0x7feec"
+  ]
+ },
+ "0x473c": {
+  "str": "*NG(%s)",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x50e8": {
+  "str": "1F F",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x5246": {
+  "str": "9FHF",
+  "n_pool_refs": 2,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x6b2c": {
+  "str": "Count",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x6b48": {
+  "str": "Description",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x6b70": {
+  "str": "---------------- --- --------- ---- --------",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x6bc8": {
+  "str": "TxMIDI",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x6bf0": {
+  "str": "ASGN(BMDW)",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x6db4": {
+  "str": "------- ------- ------- ------- ------- -------",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x6de4": {
+  "str": "F3      F4      F5      F6      F7      F8",
+  "n_pool_refs": 2,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x6e5c": {
+  "str": "%2d %-10s %08Xh %3d %8d",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x72bc": {
+  "str": "Find Prev/Next",
+  "n_pool_refs": 38,
+  "n_functions": 1,
+  "owners": [
+   "0x21e780"
+  ]
+ },
+ "0x740c": {
+  "str": "%c%c",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xabbb4"
+  ]
+ },
+ "0x7428": {
+  "str": "%08X",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0x77f8": {
+  "str": "idx\n",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xabbb4"
+  ]
+ },
+ "0x7800": {
+  "str": "adrs",
+  "n_pool_refs": 4,
+  "n_functions": 2,
+  "owners": [
+   "0xabbb4",
+   "0xc5674"
+  ]
+ },
+ "0x7814": {
+  "str": "f43m",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xabbb4"
+  ]
+ },
+ "0x7d68": {
+  "str": "%c%c",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xc5674"
+  ]
+ },
+ "0xa120": {
+  "str": "........ ",
+  "n_pool_refs": 2,
+  "n_functions": 2,
+  "owners": [
+   "0xabbb4",
+   "0x27e1e4"
+  ]
+ },
+ "0xa2b8": {
+  "str": "F3      F4      F5      F6      F7      F8",
+  "n_pool_refs": 2,
+  "n_functions": 1,
+  "owners": [
+   "0x27e1e4"
+  ]
+ },
+ "0xa2e4": {
+  "str": "RXDTDmp ASGNDmp         DmpNote DmpCtrl",
+  "n_pool_refs": 2,
+  "n_functions": 1,
+  "owners": [
+   "0x27e1e4"
+  ]
+ },
+ "0xa6d8": {
+  "str": "------- ------- ------- ------- ------- -------",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x27e1e4"
+  ]
+ },
+ "0xa798": {
+  "str": "%-5s%8ld %9s%c",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x27e1e4"
+  ]
+ },
+ "0xaf04": {
+  "str": "[INC]/[DEC] = Find Prev/Next",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x2e4e38"
+  ]
+ },
+ "0xb008": {
+  "str": "0:Disable",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xdb554"
+  ]
+ },
+ "0xb40c": {
+  "str": "1:int-done",
+  "n_pool_refs": 19,
+  "n_functions": 1,
+  "owners": [
+   "0x18eb80"
+  ]
+ },
+ "0xb434": {
+  "str": "adrs",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x27e1e4"
+  ]
+ },
+ "0xc1f8": {
+  "str": "CSum = %04Xh\n",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x18eb80"
+  ]
+ },
+ "0xe89c": {
+  "str": "System Looper",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x2e436c"
+  ]
+ },
+ "0x102fc": {
+  "str": "%cGain          %d.0   %c",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x16d214"
+  ]
+ },
+ "0x103cf": {
+  "str": " |   |-- (%3d) -->|DSP|-->|DSP|-->|DSP|          ",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x14e874"
+  ]
+ },
+ "0x10404": {
+  "str": "| R |-- (%3d) -->| 0 |-->| 2 |-->| 4 |          ",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x1bab38"
+  ]
+ },
+ "0x104a0": {
+  "str": "| d |            |DSP|   |DSP|   |DSP|--> L Ch  ",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x10cdb0"
+  ]
+ },
+ "0x1053c": {
+  "str": "------- ------- ------- ------- ------- ------- ",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x1d6e14"
+  ]
+ },
+ "0x105a4": {
+  "str": "                       USE MFX1 START   STOP    ",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x16d214"
+  ]
+ },
+ "0x106c1": {
+  "str": "`pG------- ------- ------- ------- ------- ------- ",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x1d6e14"
+  ]
+ },
+ "0x106f8": {
+  "str": "F3      F4      F5      F6      F7      F8      ",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x10cdb0"
+  ]
+ },
+ "0x13104": {
+  "str": "%31s",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x8a404"
+  ]
+ },
+ "0xa2710": {
+  "str": "t6\na",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x2e4e38"
+  ]
+ },
+ "0x138f8a": {
+  "str": "\nHbp@",
+  "n_pool_refs": 2,
+  "n_functions": 1,
+  "owners": [
+   "0x8a404"
+  ]
+ },
+ "0x226b80": {
+  "str": "|L\"a q",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0xe02d8"
+  ]
+ },
+ "0x22f896": {
+  "str": "\"a j",
+  "n_pool_refs": 2,
+  "n_functions": 1,
+  "owners": [
+   "0x88398"
+  ]
+ },
+ "0x290676": {
+  "str": ")aVq",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x25cc20"
+  ]
+ },
+ "0x2be06c": {
+  "str": "13CMfxDJFXLPPrm",
+  "n_pool_refs": 2,
+  "n_functions": 1,
+  "owners": [
+   "0x8a404"
+  ]
+ },
+ "0x2d2690": {
+  "str": "TRK2 Cue Level",
+  "n_pool_refs": 1,
+  "n_functions": 1,
+  "owners": [
+   "0x34fb0e"
+  ]
+ }
+}
